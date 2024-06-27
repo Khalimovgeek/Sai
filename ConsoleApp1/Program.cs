@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Azure.CognitiveServices.Search.WebSearch;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,14 @@ namespace ConsoleApp1
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static async void Main(string[] args)
         {
+            var apikey = "";
+            var client = new WebSearchClient(apikey);
             string url;
             url=Console.ReadLine();
-            utils.link(url);
+            utils.link(url,client);
+            
         }
     }
 }
