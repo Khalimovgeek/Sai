@@ -11,11 +11,8 @@ namespace ConsoleApp1
     {
         static async void Main(string[] args)
         {
-            var apikey = "";
-            var client = new WebSearchClient(apikey);
-            string url;
-            url=Console.ReadLine();
-            utils.link(url,client);
+            var x= Console.ReadLine();
+            utils.querry(x);
             
         }
     }

@@ -35,7 +35,26 @@ namespace ConsoleApp1
             }
 
         }
-
+        public static void search(string search)
+        {
+            var apikey = "";
+            var client = new WebSearchClient(apikey);
+            string url;
+            url = Console.ReadLine();
+            link(url, client);
+        }
+        public static string querry(string keyword)
+        {
+            string[] array = new string[] {"game","Paid","available on microsoft store"};
+            for (int i = 0; i < array.Length; i++) 
+            {
+                var querry = $"Is {keyword} a {array[i]}";
+                array[i] = search(querry) ;
+                
+            }
+            string x = "";
+            return x;
+        }
     }
     
 }
