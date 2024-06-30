@@ -12,49 +12,61 @@ namespace ConsoleApp1
 {
     internal class utils
     {
-        private readonly WebSearchClient _client;
-        public WebSearchClient(string apikey) 
+        private readonly string _apiKey;
+        private readonly HttpClient _httpClient;
+
+        public utils(string apiKey)
         {
-            _client=new WebSearchClient(new ApiKeyServiceClientCredentials(apikey));
+            _apiKey = apiKey;
+            _httpClient = new HttpClient();
         }
-        public async Task<WebWebAnswer> SearchAsync(string query)
+
+        public async Task<string> SearchAsync(string query)
         {
-            var result=await _client.Web.SearchAsync(query);
-            return result.WebPages;
+            string requestUri = $"https://serpapi.com/search?q={query}&apiKey={_apiKey}";
+            HttpResponseMessage response = await _httpClient.GetAsync(requestUri);
+            response.EnsureSuccessStatusCode();
+
+            string responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody;
         }
-        public static async void link(string url,WebSearchClient client)
+
+        public static async Task<string> LinkAsync(string url, utils client)
         {
             try
             {
-                var webdata = await client.Web.SearchAsync(query: url);
-                
+                var webData = await client.SearchAsync(url);
+                return webData;
             }
-            catch (HttpRequestException nointernet)
+            catch (HttpRequestException e)
             {
-                Console.WriteLine("No internet"); 
+                return "No internet";
+            }
+        }
+
+        public static async Task<string> SearchAsync1(string search)
+        {
+            var apiKey = "d629214be1569cb8d280b12c1c42d27"; // Replace with your actual API key
+            var client = new utils(apiKey);
+
+            string url = search;
+            var result = await LinkAsync(url, client);
+            return result;
+        }
+
+        public static async Task<string> QueryAsync(string keyword)
+        {
+            string[] array = new string[] { "game", "Paid", "available on Microsoft store" };
+            string result = $"The {keyword} is a ";
+
+            foreach (string item in array)
+            {
+                string query1 = $"Is {keyword} a {item}?";
+                string searchResult = await SearchAsync1(Convert.ToString( query1));
             }
 
+            return result;
         }
-        public static void search(string search)
-        {
-            var apikey = "";
-            var client = new WebSearchClient(apikey);
-            string url;
-            url = Console.ReadLine();
-            link(url, client);
-        }
-        public static string querry(string keyword)
-        {
-            string[] array = new string[] {"game","Paid","available on microsoft store"};
-            for (int i = 0; i < array.Length; i++) 
-            {
-                var querry = $"Is {keyword} a {array[i]}";
-                array[i] = search(querry) ;
-                
-            }
-            string x = "";
-            return x;
-        }
+
     }
-    
 }

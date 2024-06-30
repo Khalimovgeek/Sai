@@ -9,11 +9,27 @@ namespace ConsoleApp1
 {
     internal class Program
     {
-        static async void Main(string[] args)
+
+        static void Main(string[] args)
         {
-            var x= Console.ReadLine();
-            utils.querry(x);
-            
+            var x = Console.ReadLine();  // Replace with Console.ReadLine() for actual input
+            var first = x.Split(' ')[0].ToLower();
+            var cmd = x.Substring(first.Length).Trim();
+
+            if (first == "sai")
+            {
+                if (cmd == "install") { Console.WriteLine("Loading"); }
+                else if (cmd == "detail")
+                {
+                    Console.WriteLine($"General Details:\n Price: /free or paid/\n Size: /size of app/ \nDownloading from: /url or the app for downloading/ \nCategory: /type of the app/");
+                }
+                else
+                {
+                    Console.WriteLine("Commands:\ninstall: install a package\ndetail: gives a description about an application");
+                }
+                
+
+            }
         }
     }
 }
