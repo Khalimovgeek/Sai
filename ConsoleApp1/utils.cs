@@ -46,9 +46,6 @@ namespace ConsoleApp1
                             string snippet = item["snippet"];
                             
                             tags.Add(title);
-                            //tags.Add(url);
-                            //tags.Add(snippet);
-                            
                         }
                     }
                     else
