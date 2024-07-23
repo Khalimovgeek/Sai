@@ -9,6 +9,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Microsoft.Azure.CognitiveServices.Search.WebSearch;
 using System.Collections.Specialized;
+using System.Diagnostics.Tracing;
 
 namespace ConsoleApp1
 {
@@ -21,18 +22,19 @@ namespace ConsoleApp1
         {
             _apiKey = apiKey;
             _httpClient = new HttpClient();
-        }
+        }//
 
-        public static async Task qs(string query)
+        public static async Task<IEnumerable<string>> qs(string query)
         {
             string apiKey = "d629e54b80c39210fb756701dd9e50eeef37e214be1569cb8d280b12c1c42d27";
             string apiUrl = $"https://serpapi.com/search?q={query}&api_key={apiKey}";
-
+            List<string> tags = new List<string>();
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
                     HttpResponseMessage responseMessage = await client.GetAsync(apiUrl);
+                    
                     if (responseMessage.IsSuccessStatusCode)
                     {
                         var result = await responseMessage.Content.ReadAsStringAsync();
@@ -42,16 +44,16 @@ namespace ConsoleApp1
                             string title = item["title"];
                             string url = item["url"];
                             string snippet = item["snippet"];
-
-                            Console.WriteLine($"Title: {title}");
-                            Console.WriteLine($"URL: {url}");
-                            Console.WriteLine($"Snippet: {snippet}");
+                            
+                            tags.Add(title);
+                            //tags.Add(url);
+                            //tags.Add(snippet);
                             
                         }
                     }
                     else
                     {
-                        Console.WriteLine($"API request failed with status code: {responseMessage.StatusCode}");
+                        tags.Add($"API request failed with status code: {responseMessage.StatusCode}");
                     }
                 }
             }
@@ -59,6 +61,7 @@ namespace ConsoleApp1
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
+            return tags;
         }
     }
 }

@@ -59,7 +59,11 @@ namespace ConsoleApp1
             string price, size, Dldfrm, cat;
             price = size = Dldfrm = cat = "unknown";
             Console.WriteLine($"Searching {app}");
-            utils.qs(app);
+            IEnumerable<string> result=await utils.qs(app);
+            foreach (var item in result)
+            { 
+                Console.Write(item);
+            }
             await Task.Delay(1000);
             Console.WriteLine("hi");
             //Console.WriteLine($"General Details:\n Name:{a}\nPrice: {price}\n Size:{size} \nDownloading from:{Dldfrm} \nCategory:{cat}");
