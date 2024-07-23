@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Newtonsoft.Json;
 using Microsoft.Azure.CognitiveServices.Search.WebSearch;
+using System.Collections.Specialized;
 
 namespace ConsoleApp1
 {
@@ -21,52 +23,42 @@ namespace ConsoleApp1
             _httpClient = new HttpClient();
         }
 
-        public async Task<string> SearchAsync(string query)
+        public static async Task qs(string query)
         {
-            string requestUri = $"https://serpapi.com/search?q={query}&apiKey={_apiKey}";
-            HttpResponseMessage response = await _httpClient.GetAsync(requestUri);
-            response.EnsureSuccessStatusCode();
+            string apiKey = "d629e54b80c39210fb756701dd9e50eeef37e214be1569cb8d280b12c1c42d27";
+            string apiUrl = $"https://serpapi.com/search?q={query}&api_key={apiKey}";
 
-            string responseBody = await response.Content.ReadAsStringAsync();
-            return responseBody;
-        }
-
-        public static async Task<string> LinkAsync(string url, utils client)
-        {
             try
             {
-                var webData = await client.SearchAsync(url);
-                return webData;
+                using (HttpClient client = new HttpClient())
+                {
+                    HttpResponseMessage responseMessage = await client.GetAsync(apiUrl);
+                    if (responseMessage.IsSuccessStatusCode)
+                    {
+                        var result = await responseMessage.Content.ReadAsStringAsync();
+                        dynamic res = JsonConvert.DeserializeObject<dynamic>(result);
+                        foreach (var item in res["organic_results"])
+                        {
+                            string title = item["title"];
+                            string url = item["url"];
+                            string snippet = item["snippet"];
+
+                            Console.WriteLine($"Title: {title}");
+                            Console.WriteLine($"URL: {url}");
+                            Console.WriteLine($"Snippet: {snippet}");
+                            
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"API request failed with status code: {responseMessage.StatusCode}");
+                    }
+                }
             }
-            catch (HttpRequestException e)
+            catch (Exception ex)
             {
-                return "No internet";
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
-
-        public static async Task<string> SearchAsync1(string search)
-        {
-            var apiKey = "d629214be1569cb8d280b12c1c42d27"; // Replace with your actual API key
-            var client = new utils(apiKey);
-
-            string url = search;
-            var result = await LinkAsync(url, client);
-            return result;
-        }
-
-        public static async Task<string> QueryAsync(string keyword)
-        {
-            string[] array = new string[] { "game", "Paid", "available on Microsoft store" };
-            string result = $"The {keyword} is a ";
-
-            foreach (string item in array)
-            {
-                string query1 = $"Is {keyword} a {item}?";
-                string searchResult = await SearchAsync1(Convert.ToString( query1));
-            }
-
-            return result;
-        }
-
     }
 }

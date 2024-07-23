@@ -42,7 +42,7 @@ namespace ConsoleApp1
                 }
                 else if (first == "sai" && cmd1 == app)
                 {
-                    Console.WriteLine("Commands:\ninstall: install a package\ndetail: gives a description about an application");
+                    Console.WriteLine("Commands:\ninstall: install a package\nsearch: gives a description about an application");
                 }
             }
 
@@ -59,8 +59,10 @@ namespace ConsoleApp1
             string price, size, Dldfrm, cat;
             price = size = Dldfrm = cat = "unknown";
             Console.WriteLine($"Searching {app}");
-            await Task.Delay(1000);            
-            Console.WriteLine($"General Details:\n Name:{app}\nPrice: {price}\n Size:{size} \nDownloading from:{Dldfrm} \nCategory:{cat}");
+            utils.qs(app);
+            await Task.Delay(1000);
+            Console.WriteLine("hi");
+            //Console.WriteLine($"General Details:\n Name:{a}\nPrice: {price}\n Size:{size} \nDownloading from:{Dldfrm} \nCategory:{cat}");
 
         }
      }
