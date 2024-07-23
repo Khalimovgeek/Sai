@@ -58,7 +58,42 @@ namespace ConsoleApp1
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
-            return tags;
+            List <string> tagsnew =new List<string>();
+            compare(tags, tagsnew);
+            return tagsnew;
+        }
+        public static string compare(string[] strings ,out List<string> dd) 
+        {
+            var name = new HashSet<string>(strings[0].ToLower().Split(' '));
+            for (int i = 0; i <= strings.Length; i++)
+            {
+                var temp = new HashSet<string>(strings[i].ToLower().Split(' '));
+                name.IntersectWith(temp);
+            }
+            var words = strings[0].ToLower().Split(' ').ToList();
+            var cmn=new List<string>();
+            var k=words.Count;
+            var j = 0;
+            var phrase=words[0];
+            while (j<k) 
+            {
+                phrase += $" {words[j+1]}";
+                if (cmn.Contains(words[j+1])) 
+                {
+                    foreach (var word in strings) 
+                    {
+                        if (word.ToLower().Contains(phrase))
+                        {
+                            cmn.Add(word);
+                            break;
+                        }
+                    }
+                }
+                j++;
+            }
+
+            
+            return ;
         }
     }
 }
